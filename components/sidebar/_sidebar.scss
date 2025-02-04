@@ -18,7 +18,9 @@
   a {
     text-decoration: none;
   }
-
+  .logo-head {
+    max-height: 120px;
+  }
   menu {
     width: 100%;
     display: flex;
@@ -96,7 +98,8 @@
     z-index: 10;
     max-height: 80px;
 
-    > svg {
+    > svg,
+    .logo-head {
       display: none;
     }
 

@@ -1,8 +1,8 @@
-@import "../../scss/vars.scss";
+@import '../../scss/vars.scss';
 
 .summary-container {
   padding: 25px;
-  padding-top: 80px;
+  padding-top: 50px;
   align-items: center;
   height: max-content;
   width: 100%;
@@ -250,8 +250,6 @@
         padding: 20px;
         border-radius: 50%;
         background-color: $urgent;
-        display: flex;
-        align-items: center;
 
         @media (max-width: 1024px) {
           max-width: 40px;

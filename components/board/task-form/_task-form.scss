@@ -1,0 +1,570 @@
+@import '../../../scss/vars';
+
+.form-container {
+  padding: 50px 25px 0 25px;
+  width: 100%;
+  max-width: 1440px;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(#000000, 0.5);
+  z-index: 1000;
+
+  &.active {
+    display: block;
+  }
+
+  .modal-content {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-height: 100dvh;
+
+    .close {
+      cursor: pointer;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background-color: #f1f1f1;
+      }
+
+      svg {
+        width: 15px;
+        height: 15px;
+      }
+    }
+
+    .form-container {
+      padding: 0;
+    }
+  }
+}
+
+.task-form {
+  padding-bottom: 50px;
+  width: 100%;
+  h1 {
+    font-family: 'Inter', sans-serif;
+    font-size: 3.75rem;
+    margin-bottom: 48px;
+  }
+
+  .red-star {
+    color: red;
+  }
+
+  .task-form-container {
+    #task-form {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+
+      .request-alert {
+        margin-bottom: 10px;
+
+        #request-title {
+          display: none;
+        }
+
+        #request-date {
+          display: none;
+        }
+
+        #request-category {
+          display: none;
+        }
+      }
+
+      > div {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      label,
+      input:not([type='checkbox']),
+      #assignee-input,
+      textarea,
+      select {
+        display: block;
+        width: 100%;
+        font-family: 'Inter';
+        font-size: 1.25rem;
+      }
+
+      input,
+      textarea,
+      select {
+        padding: 12px 24px;
+        border: 1px solid #d1d1d1;
+        border-radius: 10px;
+
+        &:focus {
+          border: 1px solid $light-blue;
+          outline: none;
+        }
+      }
+
+      .assignee-input {
+        position: relative;
+        label {
+          margin-bottom: 12px;
+        }
+
+        #assignee-input {
+          background-image: url('data:image/svg+xml,%3Csvg%20width%3D%228%22%20height%3D%225%22%20viewBox%3D%220%200%208%205%22%20fill%3D%22none%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M3.29998%204.3L0.699975%201.7C0.383309%201.38333%200.312475%201.02083%200.487475%200.6125C0.662475%200.204167%200.974975%200%201.42498%200H6.57498C7.02498%200%207.33747%200.204167%207.51248%200.6125C7.68748%201.02083%207.61664%201.38333%207.29997%201.7L4.69998%204.3C4.59998%204.4%204.49164%204.475%204.37498%204.525C4.25831%204.575%204.13331%204.6%203.99998%204.6C3.86664%204.6%203.74164%204.575%203.62498%204.525C3.50831%204.475%203.39998%204.4%203.29998%204.3Z%22%20fill%3D%22%232A3647%22/%3E%3C/svg%3E');
+          background-repeat: no-repeat;
+          background-position: right 22px top 50%;
+          background-size: auto 6px;
+          cursor: pointer;
+          &:focus + .assignee-dropdown {
+            display: block;
+          }
+        }
+
+        .assignee-dropdown {
+          background-color: #fff;
+          max-height: 150px;
+          overflow-y: auto;
+          position: absolute;
+          top: 100%;
+          width: 100%;
+          display: none;
+
+          &:hover {
+            display: block;
+          }
+
+          > span {
+            padding: 8px 16px;
+            display: block;
+          }
+
+          .assignee {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 8px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+
+            &.selected {
+              background-color: $dark-navy-blue !important;
+              color: #fff;
+            }
+
+            &:hover {
+              background-color: #eee;
+            }
+
+            span {
+              flex: 1;
+            }
+            input {
+              pointer-events: none;
+            }
+          }
+        }
+      }
+
+      .assignees {
+        display: flex;
+        gap: 8px;
+      }
+
+      .initials-bubble {
+        width: 2.625rem;
+        height: 2.625rem;
+        border-radius: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        border: 2px solid #fff;
+        font-size: 0.75rem;
+        user-select: none;
+      }
+
+      #due-date {
+        appearance: none;
+        -webkit-appearance: none;
+        display: block;
+        cursor: pointer;
+      }
+
+      .priorities {
+        display: flex;
+        gap: 16px;
+
+        .priority {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          font-size: 1.25rem;
+          padding: 16px;
+          width: 100%;
+          background-color: #fff;
+          border-radius: 10px;
+          border: none;
+          box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.25);
+          transition: all 0.3s;
+          cursor: pointer;
+
+          svg {
+            width: 20px;
+          }
+
+          &[value='urgent'] svg {
+            fill: $urgent;
+          }
+
+          &[value='medium'] svg {
+            fill: $medium;
+          }
+
+          &[value='low'] svg {
+            fill: $low;
+          }
+
+          &:hover {
+            box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+          }
+
+          &.selected {
+            color: #fff;
+            svg {
+              fill: #fff;
+            }
+
+            &[value='urgent'] {
+              background-color: $urgent;
+            }
+
+            &[value='medium'] {
+              background-color: $medium;
+            }
+
+            &[value='low'] {
+              background-color: $low;
+            }
+          }
+        }
+      }
+
+      #category {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url('data:image/svg+xml,%3Csvg%20width%3D%228%22%20height%3D%225%22%20viewBox%3D%220%200%208%205%22%20fill%3D%22none%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M3.29998%204.3L0.699975%201.7C0.383309%201.38333%200.312475%201.02083%200.487475%200.6125C0.662475%200.204167%200.974975%200%201.42498%200H6.57498C7.02498%200%207.33747%200.204167%207.51248%200.6125C7.68748%201.02083%207.61664%201.38333%207.29997%201.7L4.69998%204.3C4.59998%204.4%204.49164%204.475%204.37498%204.525C4.25831%204.575%204.13331%204.6%203.99998%204.6C3.86664%204.6%203.74164%204.575%203.62498%204.525C3.50831%204.475%203.39998%204.4%203.29998%204.3Z%22%20fill%3D%22%232A3647%22/%3E%3C/svg%3E');
+        background-repeat: no-repeat;
+        background-position: right 22px top 50%;
+        cursor: pointer;
+        background-size: auto 6px;
+
+        option[value=''][disabled] {
+          display: none;
+        }
+      }
+
+      .subtasks {
+        max-height: 98px;
+        overflow: auto;
+        .subtask {
+          display: flex;
+          transition: all 300ms;
+          border-radius: 10px;
+          transition: all 0.3s;
+          border-bottom: 1px solid transparent;
+          position: relative;
+          z-index: 1;
+
+          input {
+            background-color: transparent;
+            border: none;
+          }
+
+          .buttons {
+            display: flex;
+            align-items: center;
+            padding-right: 16px;
+
+            button {
+              background-color: transparent;
+              border: none;
+              display: none;
+              cursor: pointer;
+              padding: 0 8px;
+              transition: all 0.3s;
+              z-index: 2;
+              svg {
+                width: 16px;
+                height: 16px;
+              }
+
+              &:hover svg {
+                fill: $light-blue;
+              }
+            }
+          }
+
+          &:hover:not(:focus-within) {
+            background-color: #d1d1d1;
+
+            .buttons {
+              button:first-child {
+                display: block;
+                border-right: 1px solid $dark-navy-blue;
+              }
+              button:nth-child(2) {
+                display: block;
+              }
+            }
+          }
+
+          &:focus-within {
+            background-color: #fff;
+            border-bottom: 1px solid $light-blue;
+            border-radius: 0;
+
+            .buttons {
+              button:nth-child(2) {
+                display: block;
+                border-right: 1px solid $dark-navy-blue;
+              }
+              button:last-child {
+                display: block;
+              }
+            }
+          }
+        }
+      }
+    }
+    hr {
+      height: auto;
+      margin: 0 48px;
+    }
+  }
+  .footer-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 50px;
+    flex: 1 1 100% !important;
+    flex-direction: row !important;
+    align-items: center;
+
+    P {
+      display: flex;
+      align-items: flex-end;
+      font-size: 20px;
+      font-weight: 400;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 16px;
+      & > button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 16px;
+        gap: 4px;
+        border-radius: 10px;
+        border: 1px solid $navy-blue;
+        font-size: 20px;
+        font-weight: 400;
+        cursor: pointer;
+
+        svg {
+          width: 24px;
+          height: 24px;
+        }
+      }
+      .clear-button {
+        &:hover {
+          color: $light-blue;
+          border-color: $light-blue;
+          box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+
+          svg {
+            fill: $light-blue;
+          }
+        }
+      }
+      .submit-button {
+        background-color: #2a3647;
+        color: white;
+
+        svg {
+          fill: #fff;
+        }
+
+        &:hover {
+          border-color: $light-blue;
+          color: #fff;
+          background-color: $light-blue;
+          box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+        }
+      }
+    }
+  }
+  .input-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #d1d1d1;
+    border-radius: 10px;
+    justify-content: space-between;
+    background-color: white;
+
+    & > input {
+      border: none !important;
+      padding: 0px;
+      width: 100%;
+      font-size: 1.25rem;
+    }
+
+    .icon {
+      padding: 12px 24px;
+      display: flex;
+
+      svg {
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+      }
+    }
+  }
+}
+@media (max-width: 1305px) {
+  .modal .modal-content {
+    width: 100%;
+    height: 100lvh;
+  }
+}
+@media (max-width: 1030px) {
+  .form-container {
+    padding-top: 40px;
+  }
+}
+@media (max-width: 800px) {
+  #task-form {
+    flex-direction: column;
+  }
+  .footer-buttons {
+    margin-bottom: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .assignee-dropdown {
+    max-height: 200px;
+    width: 100%;
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .assignee {
+    gap: 10px;
+    padding: 8px;
+
+    img {
+      width: 35px;
+      height: 35px;
+    }
+  }
+  .form-container {
+    padding: 15px;
+  }
+
+  .priorities {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .assignees {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+}
+@media (max-width: 620px) {
+  .task-form .footer-buttons P {
+    font-size: 12px;
+  }
+}
+@media (max-width: 540px) {
+  .modal .modal-content {
+    max-height: 100dvh;
+    width: 100%;
+  }
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+
+  .task-form .task-form-container #task-form .assignee-input .assignee-dropdown {
+    max-height: 180px;
+    width: 95%;
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .task-form h1 {
+    font-size: 32px;
+  }
+  .task-form .footer-buttons .buttons > button {
+    font-size: 16px;
+  }
+  .task-form .footer-buttons .buttons > button svg {
+    height: 16px;
+  }
+  .task-form .footer-buttons P {
+    display: none;
+  }
+  .task-form .footer-buttons .buttons {
+    gap: 40px;
+    height: 54px;
+    width: 100%;
+    justify-content: space-between;
+  }
+  .task-form .task-form-container #task-form > div {
+    font-size: 12px;
+  }
+  h1 {
+    font-size: 16px;
+  }
+
+  .buttons {
+    display: flex;
+
+    gap: 10px;
+  }
+
+  .priority {
+    font-size: 14px;
+  }
+}

@@ -1,15 +1,22 @@
-import returnIcon from '../icons.js';
-import { signIn, signInAnonymouslyUser, signUp } from '../firebase.js';
-import { showToast } from '../toast/toast.js';
+/**
+ * Imports required modules and functions.
+ */
+import returnIcon from "../icons.js";
+import { signIn, signInAnonymouslyUser, signUp } from "../firebase.js";
+import { showToast } from "../toast/toast.js";
+
 window.anonymouslyLogin = anonymouslyLogin;
 window.renderRegister = renderRegister;
 window.renderLogin = renderLogin;
 window.handleLogin = handleLogin;
 window.handleRegister = handleRegister;
 
-document.addEventListener('DOMContentLoaded', function () {
-    const contentRef = document.querySelector('.content');
-    contentRef.innerHTML = /*html*/`
+/**
+ * Initializes the app and sets up the default UI on DOMContentLoaded.
+ */
+document.addEventListener("DOMContentLoaded", function () {
+  const contentRef = document.querySelector(".content");
+  contentRef.innerHTML = /*html*/ `
         <div class="home">
             ${returnHeader()}
             <div class="content-container">
@@ -24,20 +31,24 @@ document.addEventListener('DOMContentLoaded', function () {
             </div>
             </div>
         </div>
-    `
-    renderLogin();
+    `;
+  renderLogin();
 
-    setTimeout(() => {
-        document.querySelector('.logo-background').style.display = 'none';
-    }, 2000);
+  setTimeout(() => {
+    document.querySelector(".logo-background").style.display = "none";
+  }, 2000);
 });
 
+/**
+ * Renders the header section of the page.
+ * @returns {string} - The HTML string for the header.
+ */
 function returnHeader() {
-    return /*html*/`
+  return /*html*/ `
         <div class="head">
             <div class="logo-container">
                 <div class="logo">
-                    ${returnIcon('logo-dark')}
+                    ${returnIcon("logo-dark")}
                 </div>
                 <div class="logo-background"></div>
             </div>
@@ -50,15 +61,19 @@ function returnHeader() {
     `;
 }
 
+/**
+ * Renders the login form and optionally displays additional buttons.
+ * @param {boolean} [displayBtns] - Whether to display buttons for toggling views.
+ */
 function renderLogin(displayBtns) {
-    const formRef = document.querySelector('.form-container');
-    const btnContainerRef = document.querySelectorAll('.btn-container');
+  const formRef = document.querySelector(".form-container");
+  const btnContainerRef = document.querySelectorAll(".btn-container");
 
-    if (displayBtns) {
-        btnContainerRef.forEach(btn => btn.style.display = '');
-    }
+  if (displayBtns) {
+    btnContainerRef.forEach((btn) => (btn.style.display = ""));
+  }
 
-    formRef.innerHTML = /*html*/`
+  formRef.innerHTML = /*html*/ `
             <div class="login">
                 <div class="header">
                     <h1>Log in<hr></h1>
@@ -68,13 +83,13 @@ function renderLogin(displayBtns) {
                         <div class="input-container">
                             <input type="email" id="email" placeholder="Email" />
                             <span>
-                                ${returnIcon('mail-outline')}
+                                ${returnIcon("mail-outline")}
                             </span>
                         </div>
                         <div class="input-container">
                             <input type="password" id="password" placeholder="Password" />
                             <span>
-                                ${returnIcon('lock')}
+                                ${returnIcon("lock")}
                             </span>
                         </div>
                     </div>
@@ -89,44 +104,47 @@ function renderLogin(displayBtns) {
                     </div>
                 </form>
             </div>
-    `
+    `;
 }
 
+/**
+ * Renders the registration form and hides toggle buttons.
+ */
 function renderRegister() {
-    const formRef = document.querySelector('.form-container');
-    const btnContainerRef = document.querySelectorAll('.btn-container');
-    btnContainerRef.forEach(btn => btn.style.display = 'none');
+  const formRef = document.querySelector(".form-container");
+  const btnContainerRef = document.querySelectorAll(".btn-container");
+  btnContainerRef.forEach((btn) => (btn.style.display = "none"));
 
-    formRef.innerHTML = /*html*/`
+  formRef.innerHTML = /*html*/ `
             <div class="register">
                 <div class="header">
                     <h1>Sign up<hr></h1>
-                    <button onclick="renderLogin(true)">${returnIcon('arrow-left')}</button>
+                    <button onclick="renderLogin(true)">${returnIcon("arrow-left")}</button>
                 </div>
                 <form class="form" onsubmit=handleRegister(event)>
                     <div class="inputs">
                         <div class="input-container">
                             <input type="text" id="name" placeholder="Name" />
                             <span>
-                                ${returnIcon('user-outline')}
+                                ${returnIcon("user-outline")}
                             </span>
                         </div>
                         <div class="input-container">
                             <input type="email" id="email" placeholder="Email" />
                             <span>
-                                ${returnIcon('mail-outline')}
+                                ${returnIcon("mail-outline")}
                             </span>
                         </div>
                         <div class="input-container">
                             <input type="password" id="password" placeholder="Password" />
                             <span>
-                                ${returnIcon('lock')}
+                                ${returnIcon("lock")}
                             </span>
                         </div>
                         <div class="input-container">
                             <input type="password" id="confirm-password" placeholder="Confirm Password" />
                             <span>
-                                ${returnIcon('lock')}
+                                ${returnIcon("lock")}
                             </span>
                         </div>
                     </div>
@@ -140,73 +158,107 @@ function renderRegister() {
                     </div>
                 </form>
             </div>
-    `
+    `;
 }
 
+/**
+ * Handles user login.
+ * @param {Event} e - The form submission event.
+ */
 async function handleLogin(e) {
-    e.preventDefault();
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const user = await signIn(email, password);
+  e.preventDefault();
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const user = await signIn(email, password);
 
-    if (user) window.location.href = '/summary.html';
-    else {
-        const formRef = document.querySelector('.form');
-        formRef.classList.add('error');
-    }
+  if (user) window.location.href = "/summary.html";
+  else {
+    const formRef = document.querySelector(".form");
+    formRef.classList.add("error");
+  }
 }
 
+/**
+ * Handles anonymous login.
+ */
 async function anonymouslyLogin() {
-    try {
-        const user = await signInAnonymouslyUser();
-        if (user) window.location.href = '/summary.html';
-    } catch (error) {
-        throw (error);
-    }
+  try {
+    const user = await signInAnonymouslyUser();
+    if (user) window.location.href = "/summary.html";
+  } catch (error) {
+    throw error;
+  }
 }
 
+/**
+ * Handles user registration.
+ * @param {Event} e - The form submission event.
+ */
 async function handleRegister(e) {
-    e.preventDefault();
-    const getField = (id) => document.getElementById(id).value;
-    const name = getField('name'), email = getField('email');
-    const password = getField('password'), confirmPassword = getField('confirm-password');
-    const checkPrivacy = document.getElementById('check-privacy').checked;
-    const errorRef = document.querySelector('.form .error-message');
-    errorRef.innerText = '';
+  e.preventDefault();
+  const getField = (id) => document.getElementById(id).value;
+  const name = getField("name"),
+    email = getField("email");
+  const password = getField("password"),
+    confirmPassword = getField("confirm-password");
+  const checkPrivacy = document.getElementById("check-privacy").checked;
+  const errorRef = document.querySelector(".form .error-message");
+  errorRef.innerText = "";
 
-    const { errorMessages, returnState } = validateRegister(name, email, password, confirmPassword, checkPrivacy);
+  const { errorMessages, returnState } = validateRegister(
+    name,
+    email,
+    password,
+    confirmPassword,
+    checkPrivacy
+  );
 
-    if (!returnState) {
-        errorRef.innerHTML = errorMessages;
-        document.querySelector('.form').classList.add('error');
-        return;
-    }
+  if (!returnState) {
+    errorRef.innerHTML = errorMessages;
+    document.querySelector(".form").classList.add("error");
+    return;
+  }
 
-    try {
-        const user = await signUp(name, email, password);
-        if (user) renderLogin(), showToast('You Signed Up successfully');
-    } catch (error) {
-        throw error;
-    }
+  try {
+    const user = await signUp(name, email, password);
+    if (user) renderLogin(), showToast("You Signed Up successfully");
+  } catch (error) {
+    throw error;
+  }
 }
 
+/**
+ * Validates the registration form inputs.
+ * @param {string} name - User's name.
+ * @param {string} email - User's email.
+ * @param {string} password - User's password.
+ * @param {string} confirmPassword - Confirmation of the password.
+ * @param {boolean} checkPrivacy - Whether the privacy policy was accepted.
+ * @returns {{ errorMessages: string, returnState: boolean }} - Validation results.
+ */
 function validateRegister(name, email, password, confirmPassword, checkPrivacy) {
-    let errorMessages = '', returnState = true;
-    if (![name, email, password, confirmPassword].every(Boolean)) {
-        errorMessages += 'Fill all fields.<br>'; returnState = false;
-    }
-    if (!checkPrivacy) {
-        errorMessages += 'Accept the privacy policy.<br>'; returnState = false;
-    }
-    if (email && !/@/.test(email)) {
-        errorMessages += 'Enter a valid email.<br>'; returnState = false;
-    }
-    if (password.length < 6) {
-        errorMessages += 'Password must be at least 6 characters.<br>'; returnState = false;
-    }
-    if (password !== confirmPassword) {
-        errorMessages += 'Passwords do not match.<br>'; returnState = false;
-    }
+  let errorMessages = "",
+    returnState = true;
+  if (![name, email, password, confirmPassword].every(Boolean)) {
+    errorMessages += "Fill all fields.<br>";
+    returnState = false;
+  }
+  if (!checkPrivacy) {
+    errorMessages += "Accept the privacy policy.<br>";
+    returnState = false;
+  }
+  if (email && !/@/.test(email)) {
+    errorMessages += "Enter a valid email.<br>";
+    returnState = false;
+  }
+  if (password.length < 6) {
+    errorMessages += "Password must be at least 6 characters.<br>";
+    returnState = false;
+  }
+  if (password !== confirmPassword) {
+    errorMessages += "Passwords do not match.<br>";
+    returnState = false;
+  }
 
-    return { errorMessages, returnState };
+  return { errorMessages, returnState };
 }

@@ -1,5 +1,10 @@
 @import '../../scss/vars';
 
+html,
+body {
+  overflow-x: hidden;
+}
+
 .test {
   max-width: 1440px;
   width: 100%;
@@ -253,35 +258,38 @@
     justify-content: space-between;
 
     @media (max-width: 1540px) {
-      flex-direction: column;
-      align-items: center;
-    }
+      .slots {
+        flex: 1;
+        min-width: 300px;
+      }
 
-    .slots {
-      flex: 1;
-      min-width: 300px;
-    }
+      .slot-content {
+        margin-top: 10px;
+        height: 100%;
+        border: 2px solid transparent;
+        display: flex;
 
-    .slot-content {
-      margin-top: 10px;
-      height: 100%;
-      border: 2px solid transparent;
+        gap: 16px;
+      }
+
+      .btn {
+        transition: none;
+      }
+
+      .rotate-task {
+        transition: none;
+        transform: none;
+      }
+
+      .slot-content {
+        transition: none;
+      }
+    }
+  }
+  @media (max-width: 1480px) {
+    .board {
       display: flex;
-
-      gap: 16px;
-    }
-
-    .btn {
-      transition: none;
-    }
-
-    .rotate-task {
-      transition: none;
-      transform: none;
-    }
-
-    .slot-content {
-      transition: none;
+      flex-direction: column;
     }
   }
 }
